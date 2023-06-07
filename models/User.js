@@ -15,8 +15,14 @@ const userSchema = new mongoose.Schema(
             required: true,
             match: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
         },
-        thoughts: [Thought],
-        friends: [ User ]
+        thoughts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            Thought
+        }],
+        friends: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: User
+        }]
     },
     {
         toJSON: {
@@ -29,6 +35,6 @@ userSchema.virtual('friendcount').get(function () {
     return this.friends.length;
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
