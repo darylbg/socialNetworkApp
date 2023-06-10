@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const { User, Thought, Reaction } = require('../../models');
-// const { findOneAndDelete } = require('../../models/Thought');
 
 router.get('/', async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find()
+        .populate('thoughts');
         res.json(users);
     } catch (error) {
         console.log(error);
