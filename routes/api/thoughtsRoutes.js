@@ -21,7 +21,7 @@ router.get('/:thoughtId', async (req, res) => {
         res.json(error);
     }
 });
-
+// the thought field is not populating when the users are called
 router.post('/', async (req, res) => {
     try {
         const thoughtId = req.body._id;
