@@ -1,6 +1,7 @@
 const router = require('express').Router();
+const mongoose = require('mongoose');
 const { User, Thought, Reaction } = require('../../models');
-const { findOneAndDelete } = require('../../models/Thought');
+// const { findOneAndDelete } = require('../../models/Thought');
 
 router.get('/', async (req, res) => {
     try {
@@ -59,9 +60,32 @@ router.delete('/:userId', async (req, res) => {
 
 router.post('/:userId/friends/:friendId', async (req, res) => {
     try {
-        const user = await User.create(
-            {_id: req.params.userId},
-            {$set: req.body.friends},
+        const userId = req.params.userId;
+        const friendId = req.params.friendId;
+
+        if(userId === friendId) {
+            res.json(`You can't add yourself as a friend lol. Go make some friends`)
+        }
+
+        const user = await User.findOneAndUpdate(
+            {_id: userId},
+            {$addToSet: { friends: new mongoose.Types.ObjectId(friendId) }},
+            { runValidators: true, new: true }
+        );
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.delete('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const friendId = req.params.friendId;
+        const user = await User.findOneAndUpdate(
+            {_id: userId},
+            {$pull: { friends: friendId }},
             { runValidators: true, new: true }
         );
         res.json(user);
