@@ -29,7 +29,7 @@ const thoughtSchema = new mongoose.Schema(
 );
 
 function dateFormatter(createdAt) {
-    return new Date();
+    return new Date(createdAt).toLocaleString();
 };
 
 thoughtSchema.virtual('reactionCount').get(function () {
