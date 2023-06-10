@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
 const { User, Thought, Reaction } = require('../../models');
-
+// the thoughts field is not populating ??? fix
 router.get('/', async (req, res) => {
     try {
         const users = await User.find()
