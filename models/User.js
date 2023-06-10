@@ -17,17 +17,18 @@ const userSchema = new mongoose.Schema(
         },
         thoughts: [{
             type: mongoose.Schema.Types.ObjectId,
-            Thought
+            ref: 'Thought'
         }],
         friends: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: User
+            ref: 'User'
         }]
     },
     {
         toJSON: {
             virtuals: true
-        }
+        },
+        id: false,
     }
 );
 

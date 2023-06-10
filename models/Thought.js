@@ -19,6 +19,12 @@ const thoughtSchema = new mongoose.Schema(
             required: true
         },
         reactions: [reactionSchema]
+    },
+    {
+        toJSON: {
+            virtuals: true
+        },
+        id: false,
     }
 );
 
