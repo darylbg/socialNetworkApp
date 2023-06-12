@@ -17,7 +17,7 @@ router.get('/:userId', async (req, res) => {
     try {
         const user = await User.findOne({_id: req.params.userId})
         .populate('thoughts');
-        res.json(user)
+        res.json(user);
     } catch (error) {
         console.log(error);
         res.json(error);

@@ -22,22 +22,25 @@ router.get('/:thoughtId', async (req, res) => {
     }
 });
 // the thought field is not populating when the users are called
-router.post('/', async (req, res) => {
+router.post('/:userId', async (req, res) => {
     try {
-        const thoughtId = req.body._id;
-        const userId = req.body.userId;
+        const userId = req.params.userId;
 
-        const thought = await Thought.create(req.body);
+        const thought = await Thought.create({ ...req.body, userId: userId });
+        
         const user = await User.findOneAndUpdate(
-            {_id: new mongoose.Types.ObjectId(userId)},
-            {$push: { thoughts: thoughtId }}
+            { _id: userId },
+            { $push: { thoughts: thought._id } },
+            { new: true }
         );
+        
         res.json(thought);
     } catch (error) {
         console.log(error);
         res.json(error);
     }
 });
+
 
 router.put('/:thoughtId', async (req, res) => {
     try {
