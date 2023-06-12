@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
-const { User, Thought, Reaction } = require('../../models');
+const { User, Thought } = require('../../models');
 
 router.get('/', async (req, res) => {
     try {
@@ -68,22 +68,11 @@ router.post('/:thoughtId/reactions', async (req, res) => {
         const thoughtId = req.params.thoughtId;
         const reactionBody = req.body.reactionBody;
 
-        const reaction = await Reaction.create(req.body);
         const thought = await Thought.findOneAndUpdate(
             {_id: new mongoose.Types.ObjectId(thoughtId)},
-            {$push: { reactions: reactionBody }}
+            {$push: { reactions: req.body }}
         );
-        console.log(reactionBody);
-        res.json(reaction);
-    } catch (error) {
-        console.log(error);
-        res.json(error);
-    }
-});
-
-router.get('/:thoughtId/reactions/:reactionId', async (req, res) => {
-    try {
-        
+        res.json(`Successfully added a reaction to ${thought.username}'s thought`);
     } catch (error) {
         console.log(error);
         res.json(error);
@@ -92,8 +81,12 @@ router.get('/:thoughtId/reactions/:reactionId', async (req, res) => {
 
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
-        await Reaction.findOneAndRemove({_id: req.params.reactionId});
-        res.json('Successfully deleted reaction')
+        const thought = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            { $pull: {reactions: {reactionId: req.params.reactionId}}},
+            { runValidators: true, new: true }
+            );
+        res.json('Successfully deleted reaction');
     } catch (error) {
         console.log(error);
         res.json(error);
