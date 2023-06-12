@@ -28,11 +28,72 @@ router.post('/', async (req, res) => {
         const userId = req.body.userId;
 
         const thought = await Thought.create(req.body);
-        const pushThought = await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             {_id: new mongoose.Types.ObjectId(userId)},
             {$push: { thoughts: thoughtId }}
         );
         res.json(thought);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.put('/:thoughtId', async (req, res) => {
+    try {
+        const thought = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId}, 
+            {$set: req.body},
+            { runValidators: true, new: true }
+        );
+        res.json(thought);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.delete('/:thoughtId', async (req, res) => {
+    try {
+        await Thought.findOneAndRemove({_id: req.params.thoughtId});
+        res.json(`successfully deleted thought`);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.post('/:thoughtId/reactions', async (req, res) => {
+    try {
+        const thoughtId = req.params.thoughtId;
+        const reactionBody = req.body.reactionBody;
+
+        const reaction = await Reaction.create(req.body);
+        const thought = await Thought.findOneAndUpdate(
+            {_id: new mongoose.Types.ObjectId(thoughtId)},
+            {$push: { reactions: reactionBody }}
+        );
+        console.log(reactionBody);
+        res.json(reaction);
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.get('/:thoughtId/reactions/:reactionId', async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+});
+
+router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
+    try {
+        await Reaction.findOneAndRemove({_id: req.params.reactionId});
+        res.json('Successfully deleted reaction')
     } catch (error) {
         console.log(error);
         res.json(error);
