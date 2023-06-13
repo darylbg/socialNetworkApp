@@ -38,9 +38,15 @@ To use the Social Network App, follow these steps:
 
 ## Deployment
 
-This application is not deployed live, but a demo walk-through video can be found [here]().
+This application is not deployed live, but a demo walk-through video can be found [here](https://www.youtube.com/watch?v=gcHC-pMfM1w).
 
-The source code can be found [here](https://github.com/darylbg/socialNetworkApp)
+The source code can be found [here](https://github.com/darylbg/socialNetworkApp).
+
+The running application will look similar to the following gifs:
+![screenshot](./Assets/18-nosql-homework-demo-01.gif)
+![screenshot](./Assets/18-nosql-homework-demo-02.gif)
+![screenshot](./Assets/18-nosql-homework-demo-03.gif)
+![screenshot](./Assets/18-nosql-homework-demo-04.gif)
 
 ## License
 
