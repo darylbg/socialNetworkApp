@@ -151,10 +151,7 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 ```json
 // example data
-{
-  "username": "lernantino",
-  "email": "lernantino@gmail.com"
-}
+http://localhost:3001/api/thoughts
 ```
 
 * `PUT` to update a user by its `_id`
