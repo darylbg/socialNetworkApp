@@ -26,13 +26,23 @@ router.get('/:userId', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+        const { username, email } = req.body;
+
+        const existingUser = await User.findOne({ username });
+        const existingEmail = await User.findOne({ email });
+        if (existingUser || existingEmail) {
+            return res.status(400).json({ error: 'Username or email already exists' });
+        }
+
         const newUser = await User.create(req.body);
-        res.json(newUser)
+
+        res.json(newUser);
     } catch (error) {
         console.log(error);
-        res.json(error);
+        res.status(500).json({ error: 'An error occurred' });
     }
 });
+
 
 router.put('/:userId', async (req, res) => {
     try {
@@ -65,21 +75,23 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
         const userId = req.params.userId;
         const friendId = req.params.friendId;
 
-        if(userId === friendId) {
-            res.json(`You can't add yourself as a friend lol. Go make some friends`)
+        if (userId === friendId) {
+            return res.json(`You can't add yourself as a friend lol. Go make some friends`);
         }
 
         const user = await User.findOneAndUpdate(
-            {_id: userId},
-            {$addToSet: { friends: new mongoose.Types.ObjectId(friendId) }},
+            { _id: userId },
+            { $addToSet: { friends: friendId } },
             { runValidators: true, new: true }
         );
+
         res.json(user);
     } catch (error) {
         console.log(error);
-        res.json(error);
+        res.status(500).json({ error: 'An error occurred' });
     }
 });
+
 
 router.delete('/:userId/friends/:friendId', async (req, res) => {
     try {
